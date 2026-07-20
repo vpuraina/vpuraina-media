@@ -1,8 +1,6 @@
-import type { Metadata } from "next";
-import SectionLabel from "@/components/ui/SectionLabel";
-import Button from "@/components/ui/Button";
-
-export const metadata: Metadata = { title: "Pricing" };
+"use client";
+import { useEffect } from "react";
+import Link from "next/link";
 
 const plans = [
   {
@@ -44,46 +42,73 @@ const plans = [
 ];
 
 export default function PricingPage() {
-  return (
-    <>
-      <section className="relative pt-[140px] pb-16 px-[5%] overflow-hidden">
-        <div className="absolute w-[500px] h-[500px] rounded-full bg-violet -top-[100px] -right-[80px] blur-[90px] opacity-20 pointer-events-none" />
-        <div className="text-center max-w-[660px] mx-auto relative z-10">
-          <SectionLabel>Investment</SectionLabel>
-          <h1 className="font-display text-[clamp(3rem,7vw,6rem)] leading-[0.95] text-[#F0F0F0] mb-5">CLEAR PRICING, REAL RESULTS</h1>
-          <p className="text-[1.05rem] text-[#888] leading-[1.8] font-light">No hidden fees. No lock-in contracts after month 3. Just results.</p>
-        </div>
-      </section>
+  useEffect(() => {
+    // Scroll-triggered fade-ins just like the homepage
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), i * 80);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
 
-      <section className="px-[5%] pb-28 relative overflow-hidden">
-        <div className="absolute w-[450px] h-[450px] rounded-full bg-violet right-[-100px] top-1/2 -translate-y-1/2 blur-[90px] opacity-12 pointer-events-none" />
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10 max-w-[1100px] mx-auto">
-          {plans.map((p) => (
-            <div key={p.tier} className={`relative rounded-2xl p-10 border transition-all duration-300 hover:-translate-y-1.5 ${p.featured ? "border-violet bg-dark-gradient" : "bg-[#0A0A0A] border-white/[0.07]"}`}>
-              {p.featured && (
-                <div className="absolute -top-[14px] left-1/2 -translate-x-1/2 bg-violet text-white text-[0.72rem] font-bold tracking-wider px-4 py-1.5 rounded-full uppercase whitespace-nowrap">Most Popular</div>
-              )}
-              <div className="text-[0.75rem] font-semibold tracking-[0.14em] uppercase text-violet-light mb-3">{p.tier}</div>
-              <div className="font-display text-[3.2rem] text-[#F0F0F0] leading-none">{p.price}<span className="text-[1.2rem] font-body font-light text-[#888]">{p.per}</span></div>
-              <p className="text-[0.82rem] text-[#888] mt-3 mb-7 leading-snug">{p.desc}</p>
-              <div className="h-px bg-white/[0.07] mb-6" />
-              <ul className="flex flex-col gap-3 mb-9">
-                {p.features.map((f) => (
-                  <li key={f.text} className={`text-[0.85rem] flex items-center gap-2.5 ${f.yes ? "text-[#F0F0F0]" : "text-[#888]"}`}>
-                    <span className={`w-[18px] h-[18px] rounded-full flex items-center justify-center text-[0.65rem] flex-shrink-0 ${f.yes ? "bg-violet text-white" : "bg-violet/30 text-violet-light"}`}>
-                      {f.yes ? "✓" : "—"}
-                    </span>
-                    {f.text}
-                  </li>
-                ))}
-              </ul>
-              <Button href="/contact" variant={p.featured ? "primary" : "outline"}>
-                {p.tier === "Enterprise" ? "Talk to Us" : "Get Started"}
-              </Button>
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  }, []);
+
+  return (
+    <main style={{ paddingTop: '140px', paddingBottom: '100px', minHeight: '100vh', paddingLeft: '5%', paddingRight: '5%' }}>
+      <div className="orb orb-1"></div>
+      
+      {/* Header Section */}
+      <div className="services-header fade-in" style={{ textAlign: 'center', marginBottom: '60px' }}>
+        <div className="section-label" style={{ justifyContent: 'center', display: 'flex' }}>Investment</div>
+        <h1 className="section-title" style={{ fontSize: 'clamp(2.5rem, 6vw, 4.5rem)' }}>CLEAR PRICING, REAL RESULTS</h1>
+        <p className="section-sub" style={{ margin: '0 auto', maxWidth: '660px' }}>No hidden fees. No lock-in contracts after month 3. Just results.</p>
+      </div>
+
+      {/* Pricing Grid */}
+      <div className="services-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '30px', maxWidth: '1100px', margin: '0 auto' }}>
+        {plans.map((p) => (
+          <div key={p.tier} className="service-card fade-in" style={{ display: 'flex', flexDirection: 'column', position: 'relative', border: p.featured ? '1px solid #6B2FEB' : '' }}>
+            <div className="service-card-glow" style={{ opacity: p.featured ? 0.6 : 0.2 }}></div>
+            
+            {/* Featured Badge */}
+            {p.featured && (
+              <div style={{ position: 'absolute', top: '-14px', left: '50%', transform: 'translateX(-50%)', background: '#6B2FEB', color: 'white', fontSize: '0.72rem', fontWeight: 'bold', letterSpacing: '0.1em', padding: '4px 16px', borderRadius: '20px', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>
+                Most Popular
+              </div>
+            )}
+
+            <div className="section-label" style={{ fontSize: '0.75rem', marginBottom: '10px', color: '#6B2FEB', display: 'block' }}>{p.tier}</div>
+            
+            <div style={{ fontSize: '3.2rem', fontWeight: 'bold', color: '#F0F0F0', marginBottom: '15px', lineHeight: '1' }}>
+              {p.price}<span style={{ fontSize: '1.2rem', color: '#888', fontWeight: 'normal' }}>{p.per}</span>
             </div>
-          ))}
-        </div>
-      </section>
-    </>
+            
+            <div className="service-desc" style={{ marginBottom: '25px', color: '#888' }}>{p.desc}</div>
+            
+            <div style={{ height: '1px', background: 'rgba(255,255,255,0.07)', marginBottom: '25px' }}></div>
+            
+            {/* Features List */}
+            <ul className="service-list" style={{ flexGrow: 1, marginBottom: '30px', listStyle: 'none', padding: 0 }}>
+              {p.features.map((f) => (
+                <li key={f.text} style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px', fontSize: '0.85rem', color: f.yes ? '#F0F0F0' : '#888' }}>
+                  <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '18px', height: '18px', borderRadius: '50%', fontSize: '0.65rem', background: f.yes ? '#6B2FEB' : 'rgba(107,47,235,0.3)', color: f.yes ? 'white' : '#B38CFF', flexShrink: 0 }}>
+                    {f.yes ? "✓" : "—"}
+                  </span>
+                  {f.text}
+                </li>
+              ))}
+            </ul>
+            
+            {/* Buttons mapped to your custom CSS classes */}
+            <Link href="/contact" className={p.featured ? "btn-primary" : "btn-secondary"} style={{ textAlign: 'center', display: 'block', padding: '12px', width: '100%', boxSizing: 'border-box' }}>
+              {p.tier === "Enterprise" ? "Talk to Us" : "Get Started"}
+            </Link>
+          </div>
+        ))}
+      </div>
+    </main>
   );
 }

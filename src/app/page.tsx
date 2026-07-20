@@ -1,11 +1,9 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
 export default function VpurainaMedia() {
   const [activeFilter, setActiveFilter] = useState("All");
-  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     // Scroll-triggered fade-ins translated to React
@@ -19,48 +17,10 @@ export default function VpurainaMedia() {
     }, { threshold: 0.1 });
 
     document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-
-    // Nav background on scroll translated to React
-    const handleScroll = () => {
-      const nav = document.getElementById('navbar');
-      if (nav) {
-        nav.style.background = window.scrollY > 60 ? 'rgba(10,10,10,0.97)' : 'rgba(10,10,10,0.85)';
-      }
-    };
-    window.addEventListener('scroll', handleScroll);
-
-    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   return (
     <>
-      {/* NAV */}
-      <nav id="navbar">
-        <div className="nav-logo">
-          <svg width="40" height="40" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="138" cy="52" r="20" fill="#6B2FEB"/>
-            <circle cx="62" cy="148" r="16" fill="rgba(200,200,200,0.7)"/>
-            <polygon points="50,40 50,110 110,75" fill="none" stroke="rgba(200,200,200,0.8)" strokeWidth="12" strokeLinejoin="round"/>
-            <polygon points="90,90 150,125 150,55" fill="none" stroke="#6B2FEB" strokeWidth="12" strokeLinejoin="round"/>
-          </svg>
-          <span className="nav-brand">VPURAINA MEDIA</span>
-        </div>
-        <ul className={`nav-links ${menuOpen ? 'flex flex-col absolute top-full left-0 w-full bg-[#0a0a0a] p-5' : ''}`}>
-          <li><Link href="#about">About</Link></li>
-          <li><Link href="#services">Services</Link></li>
-          <li><Link href="#portfolio">Work</Link></li>
-          <li><Link href="#pricing">Pricing</Link></li>
-          <li><Link href="#blog">Blog</Link></li>
-          <li><Link href="#contact">Contact</Link></li>
-        </ul>
-        <div className="nav-cta-wrap">
-          <Link href="#cta" className="nav-cta">Get Started</Link>
-        </div>
-        <div className={`hamburger ${menuOpen ? 'open' : ''}`} onClick={() => setMenuOpen(!menuOpen)}>
-          <span></span><span></span><span></span>
-        </div>
-      </nav>
-
       {/* HERO */}
       <section id="hero">
         <div className="orb orb-1"></div>
@@ -70,8 +30,8 @@ export default function VpurainaMedia() {
           <h1>GROW <span className="accent">BOLD.</span><br/>STAY <span className="accent">SOCIAL.</span></h1>
           <p className="hero-sub">We craft digital experiences that convert browsers into buyers. Data-led strategy, creative that stops the scroll, results that scale.</p>
           <div className="hero-btns">
-            <Link href="#cta" className="btn-primary">Start Your Journey →</Link>
-            <Link href="#portfolio" className="btn-secondary">See Our Work</Link>
+            <Link href="/contact" className="btn-primary">Start Your Journey →</Link>
+            <Link href="/portfolio" className="btn-secondary">See Our Work</Link>
           </div>
           <div className="hero-stats">
             <div className="stat-item"><div className="stat-num">250<span>+</span></div><div className="stat-label">Brands Scaled</div></div>
@@ -170,7 +130,7 @@ export default function VpurainaMedia() {
             <div className="section-label">Our Work</div>
             <h2 className="section-title">CAMPAIGNS THAT MADE WAVES</h2>
           </div>
-          <Link href="#cta" className="btn-secondary" style={{ fontSize: '.85rem', padding: '12px 22px', flexShrink: 0 }}>View All Projects</Link>
+          <Link href="/portfolio" className="btn-secondary" style={{ fontSize: '.85rem', padding: '12px 22px', flexShrink: 0 }}>View All Projects</Link>
         </div>
         <div className="portfolio-filter fade-in">
           {["All", "Social Media", "Paid Ads", "Branding", "Web"].map((filter) => (
@@ -211,18 +171,11 @@ export default function VpurainaMedia() {
           <p className="cta-sub">Drop your email and we'll reach out within 24 hours with a free strategy audit worth ₹15,000.</p>
           <div className="cta-form">
             <input className="cta-input" type="email" placeholder="your@email.com" />
-            <Link href="mailto:hello@vpurainamedia.com" className="btn-primary">Get Free Audit →</Link>
+            <Link href="/contact" className="btn-primary">Get Free Audit →</Link>
           </div>
           <p style={{ fontSize: '.75rem', color: 'var(--grey)', marginTop: '16px' }}>No spam. No commitment. Just a clear picture of your growth opportunity.</p>
         </div>
       </section>
-      
-      {/* FOOTER */}
-      <footer id="contact">
-        <div className="footer-bottom">
-          <div className="footer-copy">© 2026 Vpuraina Media. All rights reserved.</div>
-        </div>
-      </footer>
     </>
   );
 }

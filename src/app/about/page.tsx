@@ -1,14 +1,12 @@
-import type { Metadata } from "next";
-import SectionLabel from "@/components/ui/SectionLabel";
-import Button from "@/components/ui/Button";
-
-export const metadata: Metadata = { title: "About Us" };
+"use client";
+import { useEffect } from "react";
+import Link from "next/link";
 
 const team = [
-  { initials: "VP", name: "Vikram Puraina", role: "Founder & CEO", bio: "10+ years in digital marketing. Previously led growth at two of India's fastest-scaling D2C brands.", grad: "from-violet to-[#1a0a3d]" },
-  { initials: "SR", name: "Sneha Rawat", role: "Creative Director", bio: "Ex-McCann creative with a knack for campaigns that earn attention rather than buy it.", grad: "from-[#2d0a6e] to-violet" },
-  { initials: "AK", name: "Aryan Khanna", role: "Head of Performance", bio: "Certified Meta & Google partner. Managed ₹25Cr+ in ad spend with consistent 6x+ ROAS.", grad: "from-[#1a0040] to-violet-light" },
-  { initials: "NM", name: "Nisha Mehta", role: "Strategy Lead", bio: "Brand strategist who's launched 30+ brands. Sharp on positioning, sharper on insights.", grad: "from-[#0a001a] to-violet" },
+  { initials: "VP", name: "Vikram Puraina", role: "Founder & CEO", bio: "10+ years in digital marketing. Previously led growth at two of India's fastest-scaling D2C brands.", grad: "linear-gradient(135deg, #6B2FEB, #1a0a3d)" },
+  { initials: "SR", name: "Sneha Rawat", role: "Creative Director", bio: "Ex-McCann creative with a knack for campaigns that earn attention rather than buy it.", grad: "linear-gradient(135deg, #2d0a6e, #6B2FEB)" },
+  { initials: "AK", name: "Aryan Khanna", role: "Head of Performance", bio: "Certified Meta & Google partner. Managed ₹25Cr+ in ad spend with consistent 6x+ ROAS.", grad: "linear-gradient(135deg, #1a0040, #B38CFF)" },
+  { initials: "NM", name: "Nisha Mehta", role: "Strategy Lead", bio: "Brand strategist who's launched 30+ brands. Sharp on positioning, sharper on insights.", grad: "linear-gradient(135deg, #0a001a, #6B2FEB)" },
 ];
 
 const values = [
@@ -19,64 +17,89 @@ const values = [
 ];
 
 export default function AboutPage() {
+  useEffect(() => {
+    // Scroll-triggered fade-ins
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), i * 80);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  }, []);
+
   return (
-    <>
-      {/* Hero */}
-      <section className="relative pt-[140px] pb-24 px-[5%] overflow-hidden">
-        <div className="absolute w-[500px] h-[500px] rounded-full bg-violet -top-[120px] -right-[100px] blur-[90px] opacity-20 pointer-events-none" />
-        <div className="max-w-[800px] relative z-10">
-          <SectionLabel>Who We Are</SectionLabel>
-          <h1 className="font-display text-[clamp(3rem,7vw,6rem)] leading-[0.95] text-[#F0F0F0] mb-6">A TEAM WIRED FOR DIGITAL GROWTH</h1>
-          <p className="text-[1.05rem] text-[#888] leading-[1.8] max-w-[600px] font-light">Vpuraina Media is a full-service digital marketing agency built for brands that want more than vanity metrics. We combine sharp strategy with bold creative to help businesses build audiences that actually buy.</p>
-        </div>
-      </section>
+    <main style={{ paddingTop: '140px', paddingBottom: '100px', minHeight: '100vh', paddingLeft: '5%', paddingRight: '5%' }}>
+      <div className="orb orb-1"></div>
+      
+      {/* Hero Section */}
+      <div className="fade-in" style={{ maxWidth: '800px', marginBottom: '100px' }}>
+        <div className="section-label">Who We Are</div>
+        <h1 className="section-title" style={{ fontSize: 'clamp(3rem, 7vw, 5.5rem)', textAlign: 'left', marginBottom: '24px' }}>
+          A TEAM WIRED FOR DIGITAL GROWTH
+        </h1>
+        <p className="section-sub" style={{ textAlign: 'left', maxWidth: '600px', fontSize: '1.1rem' }}>
+          Vpuraina Media is a full-service digital marketing agency built for brands that want more than vanity metrics. We combine sharp strategy with bold creative to help businesses build audiences that actually buy.
+        </p>
+      </div>
 
-      {/* Values */}
-      <section className="px-[5%] py-24 bg-grey-dark">
-        <div className="text-center mb-14">
-          <SectionLabel>What Drives Us</SectionLabel>
-          <h2 className="font-display text-[clamp(2rem,4vw,3.5rem)] leading-none text-[#F0F0F0]">OUR CORE VALUES</h2>
+      {/* Values Section */}
+      <div style={{ marginBottom: '100px' }}>
+        <div className="fade-in" style={{ textAlign: 'center', marginBottom: '40px' }}>
+          <div className="section-label" style={{ justifyContent: 'center', display: 'flex' }}>What Drives Us</div>
+          <h2 className="section-title">OUR CORE VALUES</h2>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '24px' }}>
           {values.map((v) => (
-            <div key={v.title} className="bg-[#0A0A0A] border border-violet/25 rounded-2xl p-8 hover:border-violet/50 hover:-translate-y-1 transition-all duration-300">
-              <div className="text-[1.8rem] mb-4">{v.icon}</div>
-              <h3 className="font-semibold text-[0.95rem] mb-2">{v.title}</h3>
-              <p className="text-[0.82rem] text-[#888] leading-[1.6]">{v.text}</p>
+            <div key={v.title} className="service-card fade-in" style={{ padding: '30px' }}>
+              <div className="service-card-glow"></div>
+              <div style={{ fontSize: '2rem', marginBottom: '16px' }}>{v.icon}</div>
+              <h3 style={{ fontSize: '1.1rem', fontWeight: 'bold', marginBottom: '10px', color: '#F0F0F0' }}>{v.title}</h3>
+              <p style={{ fontSize: '0.85rem', color: '#888', lineHeight: '1.6' }}>{v.text}</p>
             </div>
           ))}
         </div>
-      </section>
+      </div>
 
-      {/* Team */}
-      <section id="team" className="px-[5%] py-24 relative overflow-hidden">
-        <div className="absolute w-[400px] h-[400px] rounded-full bg-violet -left-[100px] top-1/2 -translate-y-1/2 blur-[90px] opacity-12 pointer-events-none" />
-        <div className="text-center mb-14">
-          <SectionLabel>The People</SectionLabel>
-          <h2 className="font-display text-[clamp(2rem,4vw,3.5rem)] leading-none text-[#F0F0F0]">MEET THE TEAM</h2>
+      {/* Team Section */}
+      <div id="team" style={{ marginBottom: '100px', position: 'relative' }}>
+        <div className="orb orb-2" style={{ left: '-10%', top: '50%' }}></div>
+        
+        <div className="fade-in" style={{ textAlign: 'center', marginBottom: '40px' }}>
+          <div className="section-label" style={{ justifyContent: 'center', display: 'flex' }}>The People</div>
+          <h2 className="section-title">MEET THE TEAM</h2>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 relative z-10">
+        
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '24px', position: 'relative', zIndex: 10 }}>
           {team.map((t) => (
-            <div key={t.name} className="bg-grey-dark border border-white/[0.06] rounded-2xl overflow-hidden hover:-translate-y-1.5 hover:border-violet/40 transition-all duration-300">
-              <div className={`aspect-square bg-gradient-to-br ${t.grad} flex items-center justify-center`}>
-                <span className="font-display text-[3rem] text-white/70">{t.initials}</span>
+            <div key={t.name} className="fade-in" style={{ background: 'rgba(20,20,20,0.5)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', overflow: 'hidden', transition: 'transform 0.3s ease, border-color 0.3s ease' }}>
+              {/* Profile Image / Gradient Placeholder */}
+              <div style={{ background: t.grad, aspectRatio: '1/1', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <span style={{ fontSize: '3.5rem', fontWeight: 'bold', color: 'rgba(255,255,255,0.6)', letterSpacing: '2px' }}>{t.initials}</span>
               </div>
-              <div className="p-5">
-                <div className="font-semibold text-[0.95rem] mb-0.5">{t.name}</div>
-                <div className="text-[0.78rem] text-violet-light mb-3">{t.role}</div>
-                <p className="text-[0.78rem] text-[#888] leading-[1.55]">{t.bio}</p>
+              
+              {/* Bio Details */}
+              <div style={{ padding: '24px' }}>
+                <div style={{ fontSize: '1.1rem', fontWeight: 'bold', color: '#F0F0F0', marginBottom: '4px' }}>{t.name}</div>
+                <div style={{ fontSize: '0.75rem', color: '#B38CFF', textTransform: 'uppercase', letterSpacing: '0.1em', fontWeight: 'bold', marginBottom: '12px' }}>{t.role}</div>
+                <p style={{ fontSize: '0.85rem', color: '#888', lineHeight: '1.6' }}>{t.bio}</p>
               </div>
             </div>
           ))}
         </div>
-      </section>
+      </div>
 
-      {/* CTA */}
-      <section className="px-[5%] py-20 bg-grey-dark text-center">
-        <h2 className="font-display text-[clamp(2rem,4vw,3.5rem)] leading-none mb-4">WORK WITH US</h2>
-        <p className="text-[#888] mb-8 font-light">Ready to build something remarkable together?</p>
-        <Button href="/contact">Start a Conversation →</Button>
-      </section>
-    </>
+      {/* Mini CTA */}
+      <div className="fade-in" style={{ textAlign: 'center', padding: '60px 0', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+        <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 'bold', marginBottom: '16px', color: '#F0F0F0' }}>WORK WITH US</h2>
+        <p style={{ color: '#888', marginBottom: '32px', fontSize: '1.05rem' }}>Ready to build something remarkable together?</p>
+        <Link href="/contact" className="btn-primary">Start a Conversation →</Link>
+      </div>
+
+    </main>
   );
 }

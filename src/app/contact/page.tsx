@@ -1,52 +1,117 @@
-import type { Metadata } from "next";
-import SectionLabel from "@/components/ui/SectionLabel";
-import ContactForm from "@/components/forms/ContactForm";
-
-export const metadata: Metadata = { title: "Contact Us" };
+"use client";
+import { useEffect } from "react";
+import Link from "next/link";
 
 const info = [
   { icon: "📧", label: "Email", value: "hello@vpurainamedia.com", href: "mailto:hello@vpurainamedia.com" },
   { icon: "📞", label: "Phone", value: "+91 99999 99999", href: "tel:+919999999999" },
-  { icon: "📍", label: "Location", value: "New Delhi, India", href: "#" },
+  { icon: "📍", label: "Location", value: "New Delhi, India", href: null },
   { icon: "⏰", label: "Response Time", value: "Within 24 hours", href: null },
 ];
 
 export default function ContactPage() {
-  return (
-    <>
-      <section className="relative pt-[140px] pb-16 px-[5%] overflow-hidden">
-        <div className="absolute w-[500px] h-[500px] rounded-full bg-violet -top-[100px] -right-[80px] blur-[90px] opacity-20 pointer-events-none" />
-        <div className="max-w-[700px] relative z-10">
-          <SectionLabel>Get In Touch</SectionLabel>
-          <h1 className="font-display text-[clamp(3rem,7vw,6rem)] leading-[0.95] text-[#F0F0F0] mb-6">LET&apos;S TALK ABOUT YOUR GROWTH</h1>
-          <p className="text-[1.05rem] text-[#888] leading-[1.8] font-light">Book a free 30-minute strategy call or drop us a message. We respond to every inquiry within 24 hours.</p>
-        </div>
-      </section>
+  useEffect(() => {
+    // Scroll-triggered fade-ins
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), i * 80);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
 
-      <section className="px-[5%] pb-28">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 max-w-[1100px]">
-          <ContactForm />
-          <div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
-              {info.map((i) => (
-                <div key={i.label} className="bg-grey-dark border border-white/[0.06] rounded-2xl p-6">
-                  <div className="text-[1.4rem] mb-3">{i.icon}</div>
-                  <div className="text-[0.72rem] font-semibold tracking-wider uppercase text-[#888] mb-1">{i.label}</div>
-                  {i.href ? (
-                    <a href={i.href} className="text-[0.9rem] font-medium text-[#F0F0F0] hover:text-violet-light transition-colors">{i.value}</a>
-                  ) : (
-                    <span className="text-[0.9rem] font-medium text-[#F0F0F0]">{i.value}</span>
-                  )}
-                </div>
-              ))}
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  }, []);
+
+  // Shared input styling
+  const inputStyle = {
+    width: '100%',
+    padding: '16px',
+    background: 'rgba(255,255,255,0.02)',
+    border: '1px solid rgba(255,255,255,0.08)',
+    borderRadius: '8px',
+    color: '#F0F0F0',
+    fontSize: '0.9rem',
+    fontFamily: 'inherit',
+    outline: 'none',
+    boxSizing: 'border-box' as const,
+    marginBottom: '20px',
+  };
+
+  return (
+    <main style={{ paddingTop: '140px', paddingBottom: '120px', minHeight: '100vh', paddingLeft: '5%', paddingRight: '5%' }}>
+      <div className="orb orb-1"></div>
+      
+      {/* Hero Section */}
+      <div className="fade-in" style={{ maxWidth: '700px', marginBottom: '80px' }}>
+        <div className="section-label">Get In Touch</div>
+        <h1 className="section-title" style={{ fontSize: 'clamp(3rem, 7vw, 5.5rem)', textAlign: 'left', marginBottom: '24px' }}>
+          LET'S TALK ABOUT YOUR GROWTH
+        </h1>
+        <p className="section-sub" style={{ textAlign: 'left', fontSize: '1.1rem' }}>
+          Book a free 30-minute strategy call or drop us a message. We respond to every inquiry within 24 hours.
+        </p>
+      </div>
+
+      {/* Contact Content: Form on left, Info on right */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '60px', maxWidth: '1200px', margin: '0 auto' }}>
+        
+        {/* Left Side: Contact Form */}
+        <div className="fade-in" style={{ background: '#0A0A0A', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '40px' }}>
+          <form onSubmit={(e) => e.preventDefault()}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '0 20px' }}>
+              <div>
+                <label style={{ display: 'block', fontSize: '0.8rem', color: '#888', marginBottom: '8px' }}>Name</label>
+                <input type="text" placeholder="John Doe" style={inputStyle} required />
+              </div>
+              <div>
+                <label style={{ display: 'block', fontSize: '0.8rem', color: '#888', marginBottom: '8px' }}>Email</label>
+                <input type="email" placeholder="john@company.com" style={inputStyle} required />
+              </div>
             </div>
-            <div className="bg-violet/10 border border-violet/30 rounded-2xl p-6">
-              <h3 className="font-semibold mb-2 text-[0.95rem]">Free Strategy Audit</h3>
-              <p className="text-[0.85rem] text-[#888] leading-[1.6]">Every new inquiry gets a complimentary strategy audit worth ₹15,000 — a detailed breakdown of your current digital presence and the biggest growth opportunities.</p>
+            
+            <div>
+              <label style={{ display: 'block', fontSize: '0.8rem', color: '#888', marginBottom: '8px' }}>Company / Brand</label>
+              <input type="text" placeholder="Your Brand Name" style={inputStyle} />
             </div>
+
+            <div>
+              <label style={{ display: 'block', fontSize: '0.8rem', color: '#888', marginBottom: '8px' }}>How can we help?</label>
+              <textarea placeholder="Tell us about your goals..." style={{ ...inputStyle, minHeight: '150px', resize: 'vertical' }} required></textarea>
+            </div>
+
+            <button type="submit" className="btn-primary" style={{ width: '100%', border: 'none', cursor: 'pointer', padding: '16px', fontSize: '0.95rem' }}>
+              Send Message →
+            </button>
+          </form>
+        </div>
+
+        {/* Right Side: Info & Audit Box */}
+        <div className="fade-in">
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '16px', marginBottom: '32px' }}>
+            {info.map((i) => (
+              <div key={i.label} style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '24px' }}>
+                <div style={{ fontSize: '1.6rem', marginBottom: '12px' }}>{i.icon}</div>
+                <div style={{ fontSize: '0.72rem', fontWeight: 'bold', letterSpacing: '0.1em', textTransform: 'uppercase', color: '#888', marginBottom: '6px' }}>{i.label}</div>
+                {i.href ? (
+                  <a href={i.href} style={{ fontSize: '0.9rem', fontWeight: '500', color: '#F0F0F0', textDecoration: 'none' }}>{i.value}</a>
+                ) : (
+                  <span style={{ fontSize: '0.9rem', fontWeight: '500', color: '#F0F0F0' }}>{i.value}</span>
+                )}
+              </div>
+            ))}
+          </div>
+
+          <div style={{ background: 'rgba(107,47,235,0.1)', border: '1px solid rgba(107,47,235,0.3)', borderRadius: '16px', padding: '30px' }}>
+            <h3 style={{ fontWeight: 'bold', fontSize: '1rem', color: '#F0F0F0', marginBottom: '12px' }}>Free Strategy Audit</h3>
+            <p style={{ fontSize: '0.9rem', color: '#B38CFF', lineHeight: '1.6', margin: 0 }}>
+              Every new inquiry gets a complimentary strategy audit worth ₹15,000 — a detailed breakdown of your current digital presence and the biggest growth opportunities.
+            </p>
           </div>
         </div>
-      </section>
-    </>
+        
+      </div>
+    </main>
   );
 }
